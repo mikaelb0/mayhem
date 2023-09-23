@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="navbar-brand" href="/">
+        <img src="{{ url_for('static', filename='mayhem_logo.png') }}" alt="Mayhem Golf Logo" style="max-width: 100px;">
+      </a>
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('show_player_stats') }}">Player Stats</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('show_results') }}">Results</a></li>
+      </ul>
+    </nav>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>

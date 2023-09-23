@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Mayhem Results{% endblock %}
+
+{% block content %}
+  <h1>Mayhem Results</h1>
+    <table>
+      <tbody>
+        {% for year, bana in bana_data %}
+        <tr>
+          <td style="text-align: center;">
+              <ul>
+                  <li class ="other">Mayhem of Golf {{ year }}</li>
+                  <li>BY</li>
+                  <li>&#x1F6EC;{{ results_by_year[year]['reseledare'][0] }}</li>
+              </ul>
+          </td>
+          <td  style="text-align: center;">
+            {% if bana == 'Ekerum' %}
+            <img class="bana-img" src="https://ekerum.com/app/uploads/2019/01/logo.png" alt="Ekerum Golf Club" style="max-width: 150px;">
+            {% elif bana == 'Lanna Lodge' %}
+            <img class="bana-img" src="https://usercontent.one/wp/lannalodge.se/wp-content/uploads/2020/05/Lanna-Lodge-Golf-Resort-vit.png" alt="Lanna Lodge" style="max-width: 150px;">
+            {% elif bana == 'Bro Hof' %}
+            <img class="bana-img" src="https://www.brohofslott.se/media/fi1bi0h3/logo_shield.png" alt="Lanna Lodge" style="max-width: 150px;">
+            {% elif bana == 'Sand/Hooks' %}
+            <img class="bana-img" src="https://www.hooksherrgard.se/Content/Images/logo-white.png" alt="Sand Hooks" style="max-width: 150px;">
+            {% elif bana == 'Landskrona' %}
+            <img class="bana-img" src="https://landskronagk.se/wp-content/uploads/2022/10/logo.png" alt="Landskrona" style="max-width: 150px;">
+            {% elif bana == 'Öijared' %}
+            <img class="bana-img" src="https://oijared.se/data/media/2018/10/oijared-logotype.png" alt="Öijared" style="max-width: 150px;">
+            {% else %}
+            {{ bana }}
+            {% endif %}
+          </td>
+          <td>
+            {% if year in results_by_year %}
+            <ul>
+              {% for prize in ['first_place', 'second_place', 'third_place', 'longest_drive', 'closest_to_pin', 'scramble', 'lindroos_trophy', 'jumbo'] %}
+                {% if prize in results_by_year[year] %}
+                  {% set names = results_by_year[year][prize] %}
+                  <li>
+                    {% if prize == 'first_place' %}
+                    &#x1F947;
+                    {% elif prize == 'second_place' %}
+                    &#x1F948;
+                    {% elif prize == 'third_place' %}
+                    &#x1F949;
+                    {% elif prize == 'longest_drive' %}
+                    &#x1F4AA;
+                    {% elif prize == 'closest_to_pin' %}
+                    &#x26F3;
+                    {% elif prize == 'scramble' %}
+                    &#x1F37E;
+                    {% elif prize == 'lindroos_trophy' %}
+                    &#x1F4BC;
+                    {% elif prize == 'jumbo' %}
+                    &#x1F921;
+                    {% endif %}
+                    {{ ', '.join(names) }}
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            {% else %}
+            No results
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

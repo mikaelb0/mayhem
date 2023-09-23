@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Exceltouren{% endblock %}
+
+{% block content %}
+    <h1>Exceltouren</h1>
+    <h2>Rules</h2>
+    Scoring: Stableford
+    Tie-break: Playing Handicap (phcp)
+    <h2>Current Events</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Event Type</th>
+                <th>Pins</th>
+                <th>Putting</th>
+                <th>Tee</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in current_events_data %}
+                <tr>
+                    <td>{{ event.venue }}</td>
+                    <td>{{ event.start_date }}</td>
+                    <td>{{ event.end_date }}</td>
+                    <td>{{ event.eventtype }}</td>
+                    <td>{{ event.pins }}</td>
+                    <td>{{ event.putting }}</td>
+                    <td>{{ event.tee }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Player Results</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Venue</th>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venue, player_scores in player_results.items() %}
+                {% for player, score in player_scores.items() %}
+                    <tr>
+                        <td>{{ venue }}</td>
+                        <td>{{ player }}</td>
+                        <td>{{ score }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Add Scores</h2>
+    <form method="post" action="/submit_scores">
+        <label for="venue">Select Venue:</label>
+        <select id="venue" name="venue">
+            {% for event in current_events_data %}
+                <option value="{{ event.venue }}">{{ event.venue }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="score">Score:</label>
+        <input type="text" id="score" name="score">
+        <label for="phcp">phcp:</label>
+        <input type="text" id="phcp" name="phcp">
+        <label for="pcode">pcode:</label>
+        <input type="text" id="pcode" name="pcode">
+        <input type="submit" value="Submit Scores">
+    </form>
+     <div>
+        {% if request.args.get('submission_result') %}
+            <p>{{ request.args.get('submission_result') }}</p>
+        {% endif %}
+    </div>
+
+
+</div>
+{% endblock %}

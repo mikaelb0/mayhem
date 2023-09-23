@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Mayhem Results{% endblock %}
+
+{% block content %}
+    <h1>Mayhem Player Stats</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>First Place</th>
+          <th>Second Place</th>
+          <th>Third Place</th>
+          <th>Longest Drive</th>
+          <th>Closest to Pin</th>
+          <th>Scramble</th>
+          <th>Lindroos Trophy</th>
+          <th>Reseledare</th>
+          <th>Jumbo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for player, prizes in results_by_player.items() %}
+        <tr>
+          <td>{{ player }}</td>
+          <td>{% for i in range(prizes.get('first_place', 0)) %}&#x1F947;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('second_place', 0)) %}&#x1F948;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('third_place', 0)) %}&#x1F949;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('longest_drive', 0)) %}&#x1F4AA;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('closest_to_pin', 0)) %}&#x26F3;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('scramble', 0)) %}&#x1F37E;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('lindroos_trophy', 0)) %}&#x1F4BC;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('reseledare', 0)) %}&#x1F6EC;{% endfor %}</td>
+          <td>{% for i in range(prizes.get('jumbo', 0)) %}&#x1F921;{% endfor %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}
+
+
