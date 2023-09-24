@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-import pymysql
+import psycopg2
 from datetime import date
 import bcrypt
 
@@ -7,16 +7,16 @@ app = Flask(__name__)
 
 
 # MySQL configuration
-DB_HOST = 'mayhemgolf.mysql.pythonanywhere-services.com'
+DB_HOST = 'localhost'
 DB_USERNAME = 'mayhemgolf'
 DB_PASSWORD = '%db12db%'
-DB_NAME = 'mayhemgolf$mayhemresult'
+DB_NAME = 'mayhemgolf'
 
 # Route to display results
 @app.route('/')
 def show_results():
     # Connect to MySQL database
-    conn = pymysql.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, db=DB_NAME)
+    conn = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, database=DB_NAME)
 
     # Retrieve bana and result data from database
     cursor = conn.cursor()
@@ -45,7 +45,7 @@ def show_results():
 @app.route('/player_stats')
 def show_player_stats():
     # Connect to MySQL database
-    conn = pymysql.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, db=DB_NAME)
+    conn = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, database=DB_NAME)
     cursor = conn.cursor()
 
     # Execute a MySQL query to fetch the data
@@ -80,7 +80,7 @@ def show_exceltour_events():
     current_date = date.today()
 
     # Connect to MySQL database
-    conn = pymysql.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, db=DB_NAME)
+    conn = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, database=DB_NAME)
 
     # Retrieve events where the current date is within the start and end date range
     cursor = conn.cursor()
@@ -132,7 +132,7 @@ def submit_scores():
     pcode = request.form['pcode']
 
     # Connect to the database
-    conn = pymysql.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, db=DB_NAME)
+    conn = psycopg2.connect(host=DB_HOST, user=DB_USERNAME, password=DB_PASSWORD, database=DB_NAME)
     cursor = conn.cursor()
 
     # Retrieve all player names and hashed passwords from et_players
@@ -155,7 +155,7 @@ def submit_scores():
                        'FROM et_events AS e '
                        'JOIN et_players AS p ON p.name = %s '
                        'WHERE e.venue = %s '
-                       'ON DUPLICATE KEY UPDATE score = VALUES(score), phcp = VALUES(phcp)', (score, phcp, found_player, venue))
+                       'ON CONFLICT (event_id, player_id) DO UPDATE SET score = EXCLUDED.score, phcp = EXCLUDED.phcp',(score, phcp, found_player, venue))
         conn.commit()
         conn.close()
         submission_result = "Score submitted/updated successfully."
